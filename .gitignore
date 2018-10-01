@@ -58,7 +58,7 @@ typings/
 .env
 
 # Build folder
-dist/
+# dist/
 
 # .vscode config
 .vscode/
