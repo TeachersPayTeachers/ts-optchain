@@ -14,7 +14,7 @@
 /**
  * A generic type that cannot be `undefined`.
  */
-export type Defined<T> = Exclude<T, undefined>;
+export type Defined<T> = Exclude<T, undefined> & Exclude<T, null>;
 
 
 ////////////////////////////
@@ -106,9 +106,9 @@ export type OCType<T> = IDataAccessor<T> & DataWrapper<T>;
  *   x.d.e('optional default value') === 'optional default value'
  *   (x as any).y.z.a.b.c.d.e.f.g.h.i.j.k() === undefined
  */
-export function oc<T>(data?: T): OCType<T> {
+export function oc<T>(data?: T | null): OCType<T> {
   return new Proxy(
-    ((defaultValue?: Defined<T>) => (data !== undefined ? data : defaultValue)) as OCType<T>,
+    ((defaultValue?: Defined<T>) => ((data === undefined || data === null) ? defaultValue : data)) as OCType<T>,
     {
       get: (target, key) => {
         const obj: any = target();

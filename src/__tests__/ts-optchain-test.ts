@@ -68,4 +68,26 @@ describe('ts-optchain', () => {
     expect(oc(x).e.f('optional default value')).toEqual(x.e && x.e.f || 'optional default value');
     expect(oc(x).e.g(() => 'Yo Yo')()).toEqual((x.e && x.e.g || (() => 'Yo Yo'))());
   });
+
+ it('optional chaining for null values', () => {
+    interface X {
+      a: string | null;
+      b: {
+        d: string | null;
+        e: string | null;
+      };
+    }
+
+    const x: X = {
+      a: null,
+      b: {
+        d: null,
+        e: 'someValue'
+      }
+    };
+
+    expect(oc(x).a()).toEqual(undefined)
+    expect(oc(x).b.e()).toEqual('someValue')
+    expect(oc(x).b.d('default value')).toEqual('default value')
+  });
 });
